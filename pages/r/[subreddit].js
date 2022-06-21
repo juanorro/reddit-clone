@@ -19,7 +19,7 @@ const SubredditPage = ({ subreddit, posts }) => {
       <p className='text-center p-5'>/r/{ subreddit.name }</p>
       <Posts posts={ posts } />
     </>
-  )
+  );
 };
 
 export const getServerSideProps = async ({ params }) => {

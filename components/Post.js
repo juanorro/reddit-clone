@@ -19,9 +19,11 @@ export const Post = ({ post }) => {
       </div>
 
       <div className="mt-5">
-        <p className="flex-shrink text-2xl font-bold color-primary width-auto">
-          { post.title }
-        </p>
+        <Link href={ `/r/${ post.subredditName }/comments/${ post.id }`}>
+          <a className="flex-shrink text-2xl font-bold color-primary width-auto">
+            { post.title }
+          </a>
+        </Link>
         <p className="flex-shrink text-base font-normal color-primary width-auto mt-2">
           { post.content }
         </p>
