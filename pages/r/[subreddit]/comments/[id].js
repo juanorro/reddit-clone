@@ -1,10 +1,18 @@
+import { NewComment } from 'components/NewComment';
 import { getPost, getSubreddit } from 'lib/data';
 import prisma from 'lib/prisma';
 import timeago from 'lib/timeago';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react';
 
 const PostPage = ({ subreddit, post }) => {
+
+  const { data: session, status } = useSession();
+
+  const loading = status === 'loading';
+
+  if(loading) return null;
 
   if(!post) return <p className='text-center p-5'>Post does not exist</p>
   return (
@@ -40,6 +48,16 @@ const PostPage = ({ subreddit, post }) => {
             { post.content }
           </p>
         </div>
+        { session ? (
+          <NewComment post={ post } />
+        ) : (
+          <p className='mt-5'>
+            <a className='mr-1 underline' href='/api/auth/signin'>
+              Login
+            </a>
+            to add a comment
+          </p>
+        )}
       </div>
     </>
   )
