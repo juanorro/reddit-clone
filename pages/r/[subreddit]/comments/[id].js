@@ -1,3 +1,4 @@
+import { CommentList } from 'components/CommentList';
 import { NewComment } from 'components/NewComment';
 import { getPost, getSubreddit } from 'lib/data';
 import prisma from 'lib/prisma';
@@ -58,6 +59,7 @@ const PostPage = ({ subreddit, post }) => {
             to add a comment
           </p>
         )}
+        <CommentList comments={ post.comments } />
       </div>
     </>
   )
