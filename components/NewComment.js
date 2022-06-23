@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-export const NewComment = ({ post }) => {
+export const NewComment = ({ post, comment }) => {
   const router = useRouter();
   const [content, setContent] = useState('');
 
@@ -17,6 +17,7 @@ export const NewComment = ({ post }) => {
         const res = await fetch('/api/comment', {
           body: JSON.stringify({
             post: post.id,
+            comment: comment?.id,
             content: content,
           }),
           headers: {

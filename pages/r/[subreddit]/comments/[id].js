@@ -104,7 +104,7 @@ const PostPage = ({ subreddit, post, vote, votes }) => {
               to add a comment
             </p>
           )}
-          <CommentList comments={ post.comments } />
+          <CommentList comments={ post.comments } post={ post } />
         </div>
         
       </div>
