@@ -11,6 +11,9 @@ const NewPostPage = ({ subreddit }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
+  const [image, setImage] = useState(null);
+  const [imageURL, setImageURL] = useState(null);
+
   const { data: session, status } = useSession(); 
   const loading = status === 'loading';
 
@@ -46,23 +49,24 @@ const NewPostPage = ({ subreddit }) => {
                 return
               };
 
-              if(!content) {
+              if(!content && !image) {
                 alert('Enter some text in the post');
                 return
               };
 
+              const body = new FormData();
+              body.append('image', image);
+              body.append('title', title);
+              body.append('content', content);
+              body.append('subreddit_name', subreddit.name);
+
               const res = await fetch('/api/post', {
-                body: JSON.stringify({
-                  title,
-                  content,
-                  subreddit_name: subreddit.name,
-                }),
-                headers: {
-                  'Content-Type': 'application/json',
-                },
+                body, 
                 method: 'POST',
               });
-              router.push(`/r/${ subreddit.name }`)
+
+              router.push(`/r/${ subreddit.name }`);
+
             }}
           >
             <h2 className="text-2xl font-bold mb-8">Create a post</h2>
@@ -80,6 +84,29 @@ const NewPostPage = ({ subreddit }) => {
               placeholder='The post content'
               onChange={ (e) => setContent(e.target.value) }
             />
+
+             <div className="text-sm text-gray-600">
+              <label className="relative font-medium cursor-pointer underline my-3 block">
+                {!imageURL && <p className="">Upload an image</p> }
+                <img src={ imageURL } />
+                <input 
+                  type="file"
+                  name="name"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={ (e) => {
+                    if(e.target.files && e.target.files[0]) {
+                      if(e.target.files[0].size > 3072000) {
+                        alert('Maxium size allowed is 3MB');
+                        return false;
+                      };
+                      setImage(e.target.files[0]);
+                      setImageURL(URL.createObjectURL(e.target.files[0]));
+                    }
+                  }}
+                />
+              </label>
+            </div>
             <div className="mt-5">
               <button className="border border-gray-700 px-8 py-2 mt-0 mr-8 font-bold">
                 Post
